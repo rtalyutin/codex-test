@@ -1,3 +1,5 @@
+import { TRAITS, type TraitId } from './traits/config'
+
 export type Phase = 'deal' | 'play' | 'grow' | 'feed'
 
 export type GameState = {
@@ -8,8 +10,8 @@ export type GameState = {
 export type DealEvent = { type: 'DEAL'; payload?: unknown }
 export type PlayTraitEvent = { type: 'PLAY_TRAIT'; payload?: unknown }
 export type GrowEvent = { type: 'GROW'; payload?: unknown }
-export type FeedEvent = { type: 'FEED'; payload?: unknown }
-export type AttackEvent = { type: 'ATTACK'; payload?: unknown }
+export type FeedEvent = { type: 'FEED'; payload?: { trait: TraitId } }
+export type AttackEvent = { type: 'ATTACK'; payload?: { trait: TraitId } }
 export type NextPhaseEvent = { type: 'NEXT_PHASE' }
 
 export type GameEvent =
@@ -55,11 +57,23 @@ export const GROW: Reducer<GrowEvent> = (state, event) => {
 
 export const FEED: Reducer<FeedEvent> = (state, event) => {
   ensurePhase(state, 'feed', event.type)
+  const trait = event.payload?.trait
+  if (!trait || !(trait in TRAITS)) {
+    throw new Error(`Unknown trait ${trait}`)
+  }
   return state
 }
 
 export const ATTACK: Reducer<AttackEvent> = (state, event) => {
   ensurePhase(state, 'feed', event.type)
+  const trait = event.payload?.trait
+  const t = trait && TRAITS[trait]
+  if (!trait || !t) {
+    throw new Error(`Unknown trait ${trait}`)
+  }
+  if (!t.attack) {
+    throw new Error(`Trait ${trait} cannot attack`)
+  }
   return state
 }
 
