@@ -1,7 +1,18 @@
 import type { FC } from 'react'
 
-const Hand: FC = () => {
-  return <div>Hand</div>
+interface HandProps {
+  active: boolean
+  player: number
+}
+
+const Hand: FC<HandProps> = ({ active, player }) => {
+  return (
+    <div>
+      {active
+        ? `Hand игрока ${player + 1}`
+        : `Карты игрока ${player + 1} скрыты`}
+    </div>
+  )
 }
 
 export default Hand
