@@ -1,2 +1,2 @@
 // fsm module
-export {}
+export { gameMachine, useGameMachine } from './gameMachine'
