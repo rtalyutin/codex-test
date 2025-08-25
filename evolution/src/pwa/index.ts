@@ -1,0 +1,2 @@
+// pwa module
+export {}
