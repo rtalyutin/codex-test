@@ -6,3 +6,5 @@ export * from './net'
 export * from './store'
 export * from './pwa'
 export * from './tests'
+export * from './types'
+
